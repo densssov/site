@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<%= form_for(page_path(CGI.unescape(params[:names]))) do |f| %>
+  <div>
+    <%= f.hidden_field 'parent_id', value: @page.parent_id %>
+    <div>
+      Name: <%= label_tag 'name', @page.name %>
+    </div>
+    <div>
+      Header: <%= label_tag 'header', @page.header %>
+    </div>
+    <div>
+      Description: 
+      <div>
+        <%= @page.description.html_safe %>
+      </div>
+    </div>
+  <div>
+<% end %>
+
+<%= link_to 'Edit', edit_page_path(CGI.unescape(params[:names])) %> | <%= link_to 'Create SubPage', new_subpage_path(CGI.unescape(params[:names])) %>
+
+<% @pages.select{ |page| page.id == @page.id }.each do |page|%>
+  <%= render partial: "child", object: { parent_id: page.id, cost_name: page.name, pages: @pages, level: 1 } %>
+<% end %>

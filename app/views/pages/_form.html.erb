@@ -1,0 +1,32 @@
+<%= form_for(@page, url: @page.new_record? ? (params[:names] ? create_subpage_path(params[:names]) : pages_path) : update_page_path(params[:names]) ) do |f| %>
+  <% if @page.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@page.errors.count, "error") %> prohibited this page from being saved:</h2>
+
+      <ul>
+      <% @page.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.hidden_field 'parent_id', value: @page.parent_id %>
+    <div>
+      <%= label_tag 'Name' %>
+      <%= f.text_field :name, value: @page.name, required: true %>
+    </div>
+    <div>
+      <%= label_tag 'Header' %>
+      <%= f.text_field :header, value: @page.header, required: true %>
+    </div>
+    <div>
+      <%= label_tag 'Description' %>
+      <%= f.text_area :description, value: @page.unreplace_description, size: "colsxrols" %>
+    </div>
+  <div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

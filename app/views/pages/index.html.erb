@@ -1,0 +1,13 @@
+<h1>Main page</h1>
+
+<% @pages.select{ |page| page.parent_id.nil? }.each do |page|%>
+  <div>
+    <%= link_to page.name, page_path(page.name) %>
+  </div>
+  <%= render partial: "child", object: { parent_id: page.id, cost_name: page.name, pages: @pages, level: 1 } %>
+<% end %>
+
+<br>
+<% if @pages.blank? %>
+  <%= link_to 'Create Main Page', new_page_path %>
+<% end %>

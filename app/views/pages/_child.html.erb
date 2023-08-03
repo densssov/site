@@ -1,0 +1,7 @@
+<% child[:pages].select{|page| page.parent_id == child[:parent_id] }.each do |children| %>
+  <% child_url = child[:cost_name] + "/" + children.name %>
+  <div style="margin-left: <%= child[:level] * 10 %>px">
+    <%= link_to children.name, page_path(child_url) %>
+  </div>
+  <%= render partial: "child", object: { parent_id: children.id, cost_name: child_url, pages: child[:pages], level: child[:level] + 1 } %>
+<% end %>
