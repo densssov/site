@@ -18,7 +18,7 @@ class PagesController < ApplicationController
   def new
     @page = Page.new
     if params[:names].present?
-      @page.parent_id = Page.find_by_name(@names.last).id
+      @page.parent_id = Page.friendly.find(@names.last).id
     end
   end
 
@@ -30,7 +30,7 @@ class PagesController < ApplicationController
   # POST /*names
   def create
     if params[:names].present?
-      @page = Page.new(page_params.merge({parent_id: Page.find_by_name(@names.last).id}))
+      @page = Page.new(page_params.merge({parent_id: Page.friendly.find(@names.last).id}))
     else
       @page = Page.new(page_params)
     end
@@ -59,7 +59,7 @@ class PagesController < ApplicationController
 
   private
     def set_page
-      @page = Page.find_by_name(@names.last)
+      @page = Page.friendly.find(@names.last)
     end
 
     def page_params
@@ -73,7 +73,7 @@ class PagesController < ApplicationController
     def validate_route
       return unless params[:names] 
       # Проверка правильности пути достраницы
-      pages = Page.where(name: @names)
+      pages = Page.friendly.where(name: @names)
       @page = pages.detect{ |page| page.name == @names.last }
       # Если не существует какой-то страницы отдать 404
       not_found if @names.size != pages.count

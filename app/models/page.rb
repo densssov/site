@@ -1,4 +1,7 @@
 class Page < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :name, use: :slugged
+  
   belongs_to :parent, class_name: 'Page'
   has_many :childrens, class_name: 'Page', foreign_key: 'parent_id'
   validates :name, presence: true, format: { with: /\A[a-zA-Z0-9_а-яА-Я]+\z/ }
@@ -9,7 +12,7 @@ class Page < ActiveRecord::Base
   # Функция для преобразования параметров страницы
   def edit_page
     # Русское название переводим в транслит
-    self.name = Translit.convert(self.name.downcase, :english)
+    self.name = normalize_friendly_id(self.name)
     # Преобразование в жирный шрифт
     self.description.scan(/\*.+\*/).each do |b|
       self.description.gsub!(b, "<b>" + b[1..-2] + "</b>")
@@ -37,5 +40,9 @@ class Page < ActiveRecord::Base
       description.gsub!(a, "((" + link[1..2].join(" ") + "))" ) if link
     end
     description
+  end
+
+  def normalize_friendly_id(text)
+    text.to_slug.transliterate(:russian).normalize.to_s
   end
 end

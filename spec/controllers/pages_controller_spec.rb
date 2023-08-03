@@ -30,17 +30,17 @@ RSpec.describe PagesController, type: :controller do
       page = Page.new({ parent_id: nil, name: "главная_страница", header: "test_header", description: "test_description" } )
       page.save
       params = { parent_id: page.id, name: "subtest_name", header: "subtest_header", description: "subtest_description" }
-      post :create, { names: Translit.convert("главная_страница", :english), page: params }
+      post :create, { names: 'glavnaya_stranitsa', page: params }
 
-      expect(response).to redirect_to("/#{Translit.convert('главная_страница', :english)}/subtest_name")
+      expect(response).to redirect_to("/glavnaya_stranitsa/subtest_name")
     end
 
     it "После обновления отправит на главную страницу" do
-      page = Page.new({ parent_id: nil, name: "главная_страница", header: "test_header", description: "test_description" } )
+      page = Page.new({ parent_id: nil, name: "glavnaya_stranitsa", header: "test_header", description: "test_description" } )
       page.save
 
       params = { parent_id: nil, name: "subtest_name", header: "subtest_header", description: "subtest_description" }
-      patch :update, { names: Translit.convert('главная_страница', :english), page: params }
+      patch :update, { names: 'glavnaya_stranitsa', page: params }
 
       expect(response).to redirect_to("/subtest_name")
     end
@@ -49,9 +49,9 @@ RSpec.describe PagesController, type: :controller do
       page = Page.create({ parent_id: nil, name: "главная_страница", header: "test_header", description: "test_description" } )
       page = Page.create({ parent_id: page.id, name: "subtest_name", header: "subtest_header", description: "subtest_description" } )
       params = { parent_id: page.id, name: "subtest_name21", header: "subtest_header", description: "subtest_description" }
-      patch :update, { names: "#{Translit.convert('главная_страница', :english)}/subtest_name", page: params }
+      patch :update, { names: "glavnaya_stranitsa/subtest_name", page: params }
 
-      expect(response).to redirect_to("/#{Translit.convert('главная_страница', :english)}/subtest_name21")
+      expect(response).to redirect_to("/glavnaya_stranitsa/subtest_name21")
     end
 
     it "Отправит 404 так как страницы нет" do 
@@ -66,7 +66,7 @@ RSpec.describe PagesController, type: :controller do
     it "Отправит 404 так как неверный путь страницы в конце" do 
       page = Page.create({ parent_id: nil, name: "главная_страница", header: "test_header", description: "test_description" } )
       page = Page.create({ parent_id: page.id, name: "subtest_name", header: "subtest_header", description: "subtest_description" } )
-      expect{ get :show, {names: "#{Translit.convert('главная_страница', :english)}/main"} }.to raise_error(ActionController::RoutingError)
+      expect{ get :show, {names: "glavnaya_stranitsa/main"} }.to raise_error(ActionController::RoutingError)
     end
 
     it "Отправит 404 так как неверный путь страницы в начале" do 
