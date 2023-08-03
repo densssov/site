@@ -1,4 +1,3 @@
-# Работал через
 
 docker-compose run --service-ports web bash
 rake db:migrate
